@@ -3,8 +3,8 @@ Repository for the Lesedatenbank server files. The android app's source code is 
 
 ## Requirements
 - A MySQL database named "Lesedatenbank"
-- GuzzleHttp installed via composer
-- Parsedown installed via composer (for parsing documentation)
+- [GuzzleHttp](https://github.com/guzzle/guzzle) installed via composer
+- [Parsedown](https://github.com/erusev/parsedown) installed via composer (for parsing documentation)
 
 ## Setup
 1. Insert the username & password of the MySQL user in the `lesedatenbank.php` and the `/api/lesedatenbank.php`
