@@ -420,11 +420,11 @@
 								content();
 							} else {
 								#Return error
-								echo "Das von Ihnen eingegebene Passwort ist falsch.<br><a href=\"/lesedatenbank.php?username=$username\">Hier</a> können Sie versuchen, sich noch einmal einzuloggen.";
+								echo "Das von Ihnen eingegebene Kombination aus Benutzername und Passwort existiert nicht.<br><a href=\"/lesedatenbank.php\">Hier</a> können Sie versuchen, sich noch einmal einzuloggen.";
 							}
 						} else {
 							#Return error
-							echo 'Der von Ihnen eingegebene Benutzername existiert nicht.<br><a href="/lesedatenbank.php">Hier</a> können Sie versuchen, sich noch einmal einzuloggen.';
+							echo "Das von Ihnen eingegebene Kombination aus Benutzername und Passwort existiert nicht.<br><a href=\"/lesedatenbank.php\">Hier</a> können Sie versuchen, sich noch einmal einzuloggen.";
 						}
 					#Check if it's a register request
 					} elseif (isset($_POST['cmd']) && $_POST['cmd'] == 'register') {
