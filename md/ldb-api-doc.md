@@ -1,8 +1,8 @@
-# Lesedatenbank API Dokumentation
+# Lesedatenbank API Documentation
 
-### API-Endpunkt: *https://mint/api/lesedatenbank.php*
+### API-Endpoint: *https://YOUR_HOST/api/lesedatenbank.php*
 
-## Kategorien:
+## Categories:
 ---
 ### addCategory (POST)
 ```
