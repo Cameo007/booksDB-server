@@ -490,23 +490,11 @@
 		</div>
 	</div>
 
-	<span id="foot">
-		<!-- Cookie Banner -->
-		<div id="cookieBanner" class="alert alert-dark text-center mb-0" role="alert">
-			&#x1F36A; mint nutzt Cookies, um funktionieren. Wenn Sie keine Cookies möchten, haben Sie Pech gehabt.
-			<button type="button" class="btn btn-outline-primary btn-sm ms-3" onclick="window.open('https://www.cookiesandyou.com/')">
-				Mehr Infos
-			</button>
-			<button type="button" class="btn btn-primary btn-sm ms-3" onclick="window.hideCookieBanner()">
-				OK
-			</button>
-		</div>
-		<!-- Footer -->
-		<footer class="bg-dark text-light">
-			© Pascal Dietrich, 2022</a>
-			<span id="lang"></span>
-		</footer>
-	</span>
+	<!-- Footer -->
+	<footer class="bg-dark text-light">
+		© Pascal Dietrich, 2022</a>
+		<span id="lang"></span>
+	</footer>
 
 	<script>
 		window.addEventListener("load", function() {
