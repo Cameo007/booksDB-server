@@ -1,6 +1,13 @@
 # Lesedatenbank - Managing read and unread books
 Repository for the Lesedatenbank server files. The android app's source code is available [here](https://github.com/Cameo007/Lesedatenbank-app/).
 
+## Requirements
+- A MySQL database named "Lesedatenbank"
+- GuzzleHttp installed from composer
+
+## Setup
+1. Insert the username & password of the MySQL user in the `lesedatenbank.php` and the `/api/lesedatenbank.php`
+
 ## Libraries
   
 ## License
