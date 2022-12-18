@@ -48,21 +48,21 @@
 	<link href="/src/css/style.css" rel="stylesheet">
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="https://langmng.glitch.me/langmng.js"></script>
-    <script src="/src/js/script.js" defer></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" defer></script>
+	<script src="https://langmng.glitch.me/langmng.js"></script>
+	<script src="/src/js/script.js" defer></script>
 	<!-- Cookie Banner -->
-    <script src="/src/js/cookie-banner.js" defer></script>
-    <!-- Langmng -->
-    <script>
-        langmng.loadAndPut("/lang.json", langmng.cached(navigator.language.split("-")[0]), function() {
-            langmng.selector("#lang");
+	<script src="/src/js/cookie-banner.js" defer></script>
+	<!-- Langmng -->
+	<script>
+		langmng.loadAndPut("/lang.json", langmng.cached(navigator.language.split("-")[0]), function() {
+			langmng.selector("#lang");
 			$("#lang_selector").on('change', function() {
 				document.cookie = "lang=" + $("#lang_selector").find(":selected").val();
 				location.reload();
 			});
-        });
-    </script>
+		});
+	</script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -74,12 +74,12 @@
 			<div class="collapse navbar-collapse justify-content-end">
 				<ul class="navbar-nav">
 					<li class="nav-item"><a href="/" class="nav-link" langid="nav.home">Startseite</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle active" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" langid="nav.tools">Tools</a>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item active" href="/bdb.php" langid="nav.tools.booksDB">booksDB</a></li>
-                        </ul>
-                    </li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle active" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" langid="nav.tools">Tools</a>
+						<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+							<li><a class="dropdown-item active" href="/bdb.php" langid="nav.tools.booksDB">booksDB</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -685,13 +685,13 @@
 			//Signin form validation
 			const signinForm = document.getElementById("signin-form");
 			signinForm.addEventListener('submit', function (event) {
-                if (!signinForm.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+				if (!signinForm.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
 
-                signinForm.classList.add('was-validated')
-            }, false)
+				signinForm.classList.add('was-validated')
+			}, false)
 
 			
 			let searchParams = new URLSearchParams(window.location.search);
