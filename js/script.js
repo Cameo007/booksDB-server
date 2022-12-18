@@ -1,130 +1,123 @@
-function validateForm() {
-    'use strict'
-    const forms = document.querySelectorAll('.requires-validation')
-    Array.from(forms)
-        .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-
-                form.classList.add('was-validated')
-            }, false)
-        })
-}
-
 function shidePassword(id) {
-    const password = $("#" + id);
-    const eye = $("#" + id + "-eye");
-    if (password.attr("type") == "password") {
-        password.attr("type", "text");
-        eye.attr("class", "bi bi-eye-fill");
-    } else if (password.attr("type") == "text") {
-        password.attr("type", "password");
-        eye.attr("class", "bi bi-eye-slash-fill");
-    }
+	const password = $("#" + id);
+	const eye = $("#" + id + "-eye");
+	if (password.attr("type") == "password") {
+		password.attr("type", "text");
+		eye.attr("class", "bi bi-eye-fill");
+	} else if (password.attr("type") == "text") {
+		password.attr("type", "password");
+		eye.attr("class", "bi bi-eye-slash-fill");
+	}
 }
-
 
 function hardClean(string) {
 	return string.replace(/[^A-Za-zŽžÀ-ÿ0-9\-]+/, "").toLowerCase();
 }
+
 function clean(string) {
-	return string.replace(/[^A-Za-zŽžÀ-ÿ0-9\-!§$%\/=?\^°´<>|+*~#()\[\]{}.:,; ]+/, "");
+	return string.replace(/[^A-Za-zŽžÀ-ÿ0-9\-!§$%\/=?°<>|+*~#()\[\]{}.:,; ]+/, "");
 }
 
-function ldbSignupFormValidation() {
+
+
+function bdbSignupFormValidation() {
 	//Submit form validation
 	const form = document.getElementById("signup-form");
-	form.addEventListener('submit', function (event) {
+	form.addEventListener('submit', function(event) {
 		if (form.checkValidity()) {
-			if ($("#ldbSignupUsername").val() == "" || $("#ldbSignupUsername").hasClass("is-invalid")) {
+			if ($("#bdbSignupUsername").val() == "" || $("#bdbSignupUsername").hasClass("is-invalid")) {
 				event.preventDefault();
 				event.stopPropagation();
-				$('#ldbSignupUsername').removeClass('is-valid');
-				$('#ldbSignupUsername').addClass('is-invalid');
+
+				$('#bdbSignupUsername').removeClass('is-valid');
+				$('#bdbSignupUsername').addClass('is-invalid');
 			}
-			
-			if ($("#ldbSignupPassword").val() != $("#ldbSignupPasswordRepeat").val()) {
+
+			if ($("#bdbSignupPassword").val() != $("#bdbSignupPasswordRepeat").val()) {
 				event.preventDefault();
 				event.stopPropagation();
-				$('#ldbSignupPasswordRepeat').removeClass('is-valid');
-				$('#ldbSignupPasswordRepeat').addClass('is-invalid');
-			} else{
-				$('#ldbSignupPasswordRepeat').removeClass('is-invalid');
-				$('#ldbSignupPasswordRepeat').addClass('is-valid');
+
+				$('#bdbSignupPasswordRepeat').removeClass('is-valid');
+				$('#bdbSignupPasswordRepeat').addClass('is-invalid');
+			} else {
+				$('#bdbSignupPasswordRepeat').removeClass('is-invalid');
+				$('#bdbSignupPasswordRepeat').addClass('is-valid');
 			}
 		} else {
 			event.preventDefault();
 			event.stopPropagation();
-			
-			if ($("#ldbSignupUsername").val() == "" || $("#ldbSignupUsername").hasClass("is-invalid")) {
-				$('#ldbSignupUsername').removeClass('is-valid');
-				$('#ldbSignupUsername').addClass('is-invalid');
+
+			if ($("#bdbSignupUsername").val() == "" || $("#bdbSignupUsername").hasClass("is-invalid")) {
+				$('#bdbSignupUsername').removeClass('is-valid');
+				$('#bdbSignupUsername').addClass('is-invalid');
 			} else {
-				$('#ldbSignupUsername').removeClass('is-invalid');
-				$('#ldbSignupUsername').addClass('is-valid');
+				$('#bdbSignupUsername').removeClass('is-invalid');
+				$('#bdbSignupUsername').addClass('is-valid');
 			}
-			
-			if ($("#ldbSignupPassword").val() == "") {
-				$('#ldbSignupPassword').removeClass('is-valid');
-				$('#ldbSignupPassword').addClass('is-invalid');
+
+			if ($("#bdbSignupPassword").val() == "") {
+				$('#bdbSignupPassword').removeClass('is-valid');
+				$('#bdbSignupPassword').addClass('is-invalid');
+
 			} else {
-				$('#ldbSignupPassword').removeClass('is-invalid');
-				$('#ldbSignupPassword').addClass('is-valid');
+				$('#bdbSignupPassword').removeClass('is-invalid');
+				$('#bdbSignupPassword').addClass('is-valid');
 			}
-			
-			if ($("#ldbSignupPasswordRepeat").val() == "" || $("#ldbSignupPassword").val() != $("#ldbSignupPasswordRepeat").val()) {
-				$('#ldbSignupPasswordRepeat').removeClass('is-valid');
-				$('#ldbSignupPasswordRepeat').addClass('is-invalid');
+
+			if ($("#bdbSignupPasswordRepeat").val() == "" || $("#bdbSignupPassword").val() != $("#bdbSignupPasswordRepeat").val()) {
+				$('#bdbSignupPasswordRepeat').removeClass('is-valid');
+				$('#bdbSignupPasswordRepeat').addClass('is-invalid');
 			} else {
-				$('#ldbSignupPasswordRepeat').removeClass('is-invalid');
-				$('#ldbSignupPasswordRepeat').addClass('is-valid');
+				$('#bdbSignupPasswordRepeat').removeClass('is-invalid');
+				$('#bdbSignupPasswordRepeat').addClass('is-valid');
 			}
 		}
 	}, false);
+
 	
 	//Change form validation
-	$('#ldbSignupUsername').on('input', function() {
-		ldbIsUsernameAvailable("#ldbSignupUsername")
+	$('#bdbSignupUsername').on('input', function() {
+		bdbIsUsernameAvailable("#bdbSignupUsername")
 	});
-	
-	$('#ldbSignupPassword').on('input', function() {
-		if ($("#ldbSignupPassword").val() == "") {
-			$('#ldbSignupPassword').removeClass('is-valid');
-			$('#ldbSignupPassword').addClass('is-invalid');
+
+	$('#bdbSignupPassword').on('input', function() {
+		if ($("#bdbSignupPassword").val() == "") {
+			$('#bdbSignupPassword').removeClass('is-valid');
+			$('#bdbSignupPassword').addClass('is-invalid');
 		} else {
-			$('#ldbSignupPassword').removeClass('is-invalid');
-			$('#ldbSignupPassword').addClass('is-valid');
+			$('#bdbSignupPassword').removeClass('is-invalid');
+			$('#bdbSignupPassword').addClass('is-valid');
 		}
-			
-		if ($("#ldbSignupPasswordRepeat").val() == "" || $("#ldbSignupPassword").val() != $("#ldbSignupPasswordRepeat").val()) {
-			$('#ldbSignupPasswordRepeat').removeClass('is-valid');
-			$('#ldbSignupPasswordRepeat').addClass('is-invalid');
+
+		if ($("#bdbSignupPasswordRepeat").val() == "" || $("#bdbSignupPassword").val() != $("#bdbSignupPasswordRepeat").val()) {
+			$('#bdbSignupPasswordRepeat').removeClass('is-valid');
+			$('#bdbSignupPasswordRepeat').addClass('is-invalid');
 		} else {
-			$('#ldbSignupPasswordRepeat').removeClass('is-invalid');
-			$('#ldbSignupPasswordRepeat').addClass('is-valid');
+			$('#bdbSignupPasswordRepeat').removeClass('is-invalid');
+			$('#bdbSignupPasswordRepeat').addClass('is-valid');
 		}
 	});
-	$('#ldbSignupPasswordRepeat').on('input', function() {
-		if ($("#ldbSignupPassword").val() == "") {
-			$('#ldbSignupPassword').removeClass('is-valid');
-			$('#ldbSignupPassword').addClass('is-invalid');
+
+	$('#bdbSignupPasswordRepeat').on('input', function() {
+		if ($("#bdbSignupPassword").val() == "") {
+			$('#bdbSignupPassword').removeClass('is-valid');
+			$('#bdbSignupPassword').addClass('is-invalid');
 		} else {
-			$('#ldbSignupPassword').removeClass('is-invalid');
-			$('#ldbSignupPassword').addClass('is-valid');
+			$('#bdbSignupPassword').removeClass('is-invalid');
+			$('#bdbSignupPassword').addClass('is-valid');
 		}
-			
-		if ($("#ldbSignupPasswordRepeat").val() == "" || $("#ldbSignupPassword").val() != $("#ldbSignupPasswordRepeat").val()) {
-			$('#ldbSignupPasswordRepeat').removeClass('is-valid');
-			$('#ldbSignupPasswordRepeat').addClass('is-invalid');
+
+		if ($("#bdbSignupPasswordRepeat").val() == "" || $("#bdbSignupPassword").val() != $("#bdbSignupPasswordRepeat").val()) {
+			$('#bdbSignupPasswordRepeat').removeClass('is-valid');
+			$('#bdbSignupPasswordRepeat').addClass('is-invalid');
 		} else {
-			$('#ldbSignupPasswordRepeat').removeClass('is-invalid');
-			$('#ldbSignupPasswordRepeat').addClass('is-valid');
+			$('#bdbSignupPasswordRepeat').removeClass('is-invalid');
+			$('#bdbSignupPasswordRepeat').addClass('is-valid');
 		}
 	});
 }
+
+
 
 function signInUp(action) {
 	if (action == "up") {
@@ -136,9 +129,9 @@ function signInUp(action) {
 	}
 }
 
-function ldbIsUsernameAvailable(id) {
+function bdbIsUsernameAvailable(id) {
 	if ($(id).val() != "") {
-		fetch("/api/lesedatenbank.php?cmd=isUsernameAvailable&name=" + $(id).val()).then(function (response) {
+		fetch("/api/bdb.php/account/isUsernameAvailable?name=" + $(id).val()).then(function(response) {
 			response.json().then(response => {
 				if (response["content"]) {
 					$(id).removeClass('is-invalid');
@@ -155,200 +148,224 @@ function ldbIsUsernameAvailable(id) {
 	}
 }
 
-function ldbAddCat() {
-	var catName = $("#ldbAddCat-catName").val();
-	$.post("/api/lesedatenbank.php", 
-		{
-            cmd: "addCategory",
-            categoryName: catName
-		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php?table=" + encodeURIComponent(catName), "_self");
-	});
+
+
+function bdbAddCat() {
+	var catName = clean($("#bdbAddCat-catName").val());
+	window.open("https://mint.jojojux.de/bdb.php?table=" + encodeURIComponent(catName), "_self");
 }
 
-function ldbEditCat() {
-	var selectedOption = $('#ldbTableSelect').find(":selected");
-	if ($("#ldbTableSelect").attr("style") == "" || $("#ldbTableSelect").attr("style") == null) {
-		$("#ldbTableSelect-text").val(selectedOption.text());
-	
-		$("#ldbTableSelect").attr("style", "display: none;");
-		$("#ldbTableSelect-text").attr("style", "");
-		$("#ldbEditCat-button").html("<i class=\"bi bi-check\"></i>");
+function bdbEditCat() {
+	var selectedOption = $('#bdbTableSelect').find(":selected");
+	if ($("#bdbTableSelect").attr("style") == "" || $("#bdbTableSelect").attr("style") == null) {
+		$("#bdbTableSelect-text").val(selectedOption.text());
+
+		$("#bdbTableSelect").attr("style", "display: none;");
+		$("#bdbTableSelect-text").attr("style", "");
+
+		$("#bdbEditCat-button").html("<i class=\"bi bi-check\"></i>");
 	} else {
 		var oldName = selectedOption.text();
-		var newName = $("#ldbTableSelect-text").val();
+		var newName = clean($("#bdbTableSelect-text").val());
 
 		selectedOption.text(newName)
 		selectedOption.val(newName)
 		selectedOption.attr("id", hardClean(newName))
-		
-		$("#ldbTableSelect-text").attr("style", "display: none;");
-		$("#ldbTableSelect").attr("style", "");
-		$("#ldbEditCat-button").html("<i class=\"bi bi-pencil-fill\"></i>");
-		
-		$.post("/api/lesedatenbank.php", 
+
+		$("#bdbTableSelect-text").attr("style", "display: none;");
+		$("#bdbTableSelect").attr("style", "");
+		$("#bdbEditCat-button").html("<i class=\"bi bi-pencil-fill\"></i>");
+
+		$.post("/api/bdb.php/category/rename",
 			{
-				cmd: "renameCategory",
 				oldCategoryName: oldName,
 				newCategoryName: newName
 			},
-			function (response, status) {
+			function(response, status) {
 				$("#okModal-body").text(JSON.parse(response)['content'])
-				var okModal = new bootstrap.Modal(document.getElementById('okModal'), {keyboard: false, focus: true});
+				var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+					keyboard: false,
+					focus: true
+				});
 				okModal.show();
-		});
+			});
 	}
 }
 
-function ldbDeleteCat() {
-	var catName = $('#ldbTableSelect').find(":selected").val();
-	
-	$("#qModal-OK").attr("onclick", "ldbDeleteCat2()");
-	$("#qModal-body").text("Sind Sie sicher, dass Sie die Kategorie \"" + catName + "\" endgültig löschen wollen?")
-	var qModal = new bootstrap.Modal(document.getElementById('qModal'), {keyboard: false, focus: true});
+function bdbDeleteCat() {
+	var catName = $('#bdbTableSelect').find(":selected").val();
+
+	$("#qModal-OK").attr("onclick", "bdbDeleteCat2()");
+	$("#qModal-body").text("Sind Sie sicher, dass Sie die Kategorie \"" + catName + "\" endgültig löschen wollen?");
+
+	var qModal = new bootstrap.Modal(document.getElementById('qModal'), {
+		keyboard: false,
+		focus: true
+	});
 	qModal.show();
 }
-function ldbDeleteCat2() {
-	var catName = $('#ldbTableSelect').find(":selected").val();
-	$.post("/api/lesedatenbank.php", 
+
+function bdbDeleteCat2() {
+	var catName = $('#bdbTableSelect').find(":selected").val();
+	$.post("/api/bdb.php/category/delete",
 		{
-			cmd: "deleteCategory",
 			categoryName: catName,
 		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php","_self");
-	});
+		function(response, status) {
+			window.open("https://mint.jojojux.de/bdb.php", "_self");
+		});
 }
 
-function ldbAddBook() {
-	var catName = $("#ldbTableSelect").find(":selected").val();
-	var bookName = $("#ldbAddBook-bookName").val();
-	var authorName = $("#ldbAddBook-authorName").val();
-	var read = $("#ldbAddBook-read").prop("checked");
-	
-	$.post("/api/lesedatenbank.php", 
+function bdbAddBook() {
+	var catName = $("#bdbTableSelect").find(":selected").val();
+	var bookName = clean($("#bdbAddBook-bookName").val());
+	var authorName = clean($("#bdbAddBook-authorName").val());
+	var read = $("#bdbAddBook-read").prop("checked");
+
+	$.post("/api/bdb.php/book/add",
 		{
-            cmd: "addBook",
 			categoryName: catName,
-            bookName: bookName,
+			bookName: bookName,
 			author: authorName,
 			read: read
 		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php?table=" + encodeURIComponent(catName), "_self");
-	});
+		function(response, status) {
+			window.open("https://mint.jojojux.de/bdb.php?table=" + encodeURIComponent(catName), "_self");
+		});
 }
 
-function ldbEditBook(bookID) {
+function bdbEditBook(bookID) {
 	$("#" + bookID).prop("readonly", false);
 }
 
-function ldbSaveBook(bookID) {
+function bdbSaveBook(bookID) {
 	if (!bookID.includes("read")) {
 		$("#" + bookID).prop("readonly", true);
 	}
-	
+
 	bookID = bookID.split("-")[0];
-	
-	var cat = $("#ldbTableSelect").find(":selected").val();
+
+	var cat = $("#bdbTableSelect").find(":selected").val();
 	var oldName = clean($("#" + bookID + "-name").attr('name'));
 	var newName = clean($("#" + bookID + "-name").val());
 	var author = clean($("#" + bookID + "-author").val());
 	var read = $("#" + bookID + "-read").prop("checked");
-	
-	$.post("/api/lesedatenbank.php", 
+
+	$.post("/api/bdb.php/book/edit",
 		{
-            cmd: "editBook",
 			categoryName: cat,
-            oldBookName: oldName,
+			oldBookName: oldName,
 			newBookName: newName,
 			author: author,
 			read: read
 		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php?table=" + encodeURIComponent(catName), "_self");
-	});
+		function(response, status) {
+			window.open("https://mint.jojojux.de/bdb.php?table=" + encodeURIComponent(cat), "_self");
+		});
 }
 
-function ldbDeleteBook(bookID) {
+function bdbDeleteBook(bookID) {
 	bookID = bookID.split("-")[0];
-	
-	$("#" + bookID + "-group").remove();
-	
-	var cat = $("#ldbTableSelect").find(":selected").val();
+
+	var cat = $("#bdbTableSelect").find(":selected").val();
 	var name = $("#" + bookID + "-name").val();
 	
-	$.post("/api/lesedatenbank.php", 
+	$("#" + bookID + "-group").remove();
+
+	$.post("/api/bdb.php/book/delete",
 		{
-            cmd: "deleteBook",
 			categoryName: cat,
-            name: name
+			bookName: name
 		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php?table=" + encodeURIComponent(cat), "_self");
-	});
+		function(response, status) {
+			window.open("https://mint.jojojux.de/bdb.php?table=" + encodeURIComponent(cat), "_self");
+		});
 }
 
+function bdbChangeUsername() {
+	$("#qiModal-OK").attr("onclick", "bdbChangeUsername2()");
+	$("#qiModal-body-text").text(langmng.get("tools.booksDB.enterNewUsername", langmng.current));
+	$("#qiModal-body-input").attr("placeholder", langmng.get("tools.booksDB.newUsername", langmng.current));
 
-function ldbChangeUsername() {
-	$("#qiModal-OK").attr("onclick", "ldbChangeUsername2()");
-	$("#qiModal-body-text").text("Bitte geben Sie ihren neuen Benutzernamen ein.");
-	$("#qiModal-body-input").attr("placeholder", "Neuer Benutzername");
 	$("#qiModal-body-input").on('input', function() {
-		ldbIsUsernameAvailable("#qiModal-body-input")
+		bdbIsUsernameAvailable("#qiModal-body-input")
 	});
-	var qiModal = new bootstrap.Modal(document.getElementById('qiModal'), {keyboard: false, focus: true});
+
+	var qiModal = new bootstrap.Modal(document.getElementById('qiModal'), {
+		keyboard: false,
+		focus: true
+	});
 	qiModal.show();
 }
-function ldbChangeUsername2() {
+
+function bdbChangeUsername2() {
 	if ($("#qiModal-body-input").val() != "" && $("#qiModal-body-input").hasClass("is-valid")) {
 		//Hide modal
 		$('#qiModal').modal('hide');
-		
-		$.post("/api/lesedatenbank.php", {
-            cmd: "changeUsername",
-			newUsername: $("#qiModal-body-input").val()
-		},
-		function (response, status) {
-			$("#okModal-OK").attr("onclick", "window.location.href = window.location.href;");
-			$("#okModal-body").text(JSON.parse(response)['content'])
-			var okModal = new bootstrap.Modal(document.getElementById('okModal'), {keyboard: false, focus: true});
-			okModal.show();
-		});
+
+		$.post("/api/bdb.php/account/changeUsername", {
+				newUsername: $("#qiModal-body-input").val()
+			},
+			function(response, status) {
+				$("#okModal-OK").attr("onclick", "window.location.href = window.location.href;");
+				$("#okModal-body").text(JSON.parse(response)['content'])
+
+				var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+					keyboard: false,
+					focus: true
+				});
+				okModal.show();
+			
+				//Clear input field
+				$("#qiModal-body-input").val("")
+			});
 	}
 }
 
-function ldbChangePassword() {
+function bdbChangePassword() {
 	//Build modal
-	$("#qipModal-OK").attr("onclick", "ldbChangePassword2()");
-	$("#qipModal-body-text").text("Bitte geben Sie ihr neues Passwort ein.");
-	var qipModal = new bootstrap.Modal(document.getElementById('qipModal'), {keyboard: false, focus: true});
-	qipModal.show();
+	$("#qipModal-OK").attr("onclick", "bdbChangePassword2()");
+	$("#qipModal-body-text").text(langmng.get("tools.booksDB.enterNewPassword", langmng.current));
+	$("#qipModal-body-password").attr("placeholder", langmng.get("tools.booksDB.newPassword", langmng.current));
+	$("#qipModal-body-passwordRepeat").attr("placeholder", langmng.get("tools.booksDB.newPasswordRepeat", langmng.current));
 	
+	var qipModal = new bootstrap.Modal(document.getElementById('qipModal'), {
+		keyboard: false,
+		focus: true
+	});
+	qipModal.show();
+
 	//Start validation
-	ldbChangePasswordFormValidation();
+	bdbChangePasswordFormValidation();
 }
-function ldbChangePassword2() {
+
+function bdbChangePassword2() {
 	if ($('#qipModal-body-password').hasClass('is-valid') && $('#qipModal-body-passwordRepeat').hasClass('is-valid')) {
 		//Hide modal
 		$('#qipModal').modal('hide');
-		
-		//Post data
-		$.post("/api/lesedatenbank.php", {
-			cmd: "changePassword",
-			newPassword: $("#qipModal-body-password").val()
-		},
-		function (response, status) {
-			$("#okModal-OK").attr("onclick", "window.location.href = window.location.href;");
-			$("#okModal-body").text(JSON.parse(response)['content'])
-			var okModal = new bootstrap.Modal(document.getElementById('okModal'), {keyboard: false, focus: true});
-			okModal.show();
-		});
+
+		//POST data
+		$.post("/api/bdb.php/account/changePassword", {
+				newPassword: $("#qipModal-body-password").val()
+			},
+			function(response, status) {
+				$("#okModal-OK").attr("onclick", "window.location.href = window.location.href;");
+				$("#okModal-body").text(JSON.parse(response)['content'])
+
+				var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+					keyboard: false,
+					focus: true
+				});
+				okModal.show();
+			
+				//Clear input fields
+				$("#qipModal-body-password").val("");
+				$("#qipModal-body-functionRepeat").val("");
+			});
 	}
 }
 
-function ldbChangePasswordFormValidation() {
+function bdbChangePasswordFormValidation() {
 	function fullValidation() {
 		if ($("#qipModal-body-password").val() == "") {
 			$('#qipModal-body-password').removeClass('is-valid');
@@ -357,7 +374,7 @@ function ldbChangePasswordFormValidation() {
 			$('#qipModal-body-password').removeClass('is-invalid');
 			$('#qipModal-body-password').addClass('is-valid');
 		}
-			
+
 		if ($("#qipModal-body-passwordRepeat").val() == "" || $("#qipModal-body-password").val() != $("#qipModal-body-passwordRepeat").val()) {
 			$('#qipModal-body-passwordRepeat').removeClass('is-valid');
 			$('#qipModal-body-passwordRepeat').addClass('is-invalid');
@@ -366,27 +383,195 @@ function ldbChangePasswordFormValidation() {
 			$('#qipModal-body-passwordRepeat').addClass('is-valid');
 		}
 	}
-	
+
 	$('#qipModal-body-password').on('input', function() {
 		fullValidation();
 	});
+
 	$('#qipModal-body-passwordRepeat').on('input', function() {
 		fullValidation();
 	});
 }
 
-function ldbDeleteAccount() {
-	$("#qModal-OK").attr("onclick", "ldbDeleteAccount2()");
-	$("#qModal-body").text("Sind Sie sicher, dass Sie ihr Lesedatenbank-Konto endgültig löschen wollen?")
-	var qModal = new bootstrap.Modal(document.getElementById('qModal'), {keyboard: false, focus: true});
+
+
+function bdbDeleteAccount() {
+	$("#qModal-OK").attr("onclick", "bdbDeleteAccount2()");
+	$("#qModal-body").text(langmng.get("tools.booksDB.wantToDeleteAccount", langmng.current));
+
+	var qModal = new bootstrap.Modal(document.getElementById('qModal'), {
+		keyboard: false,
+		focus: true
+	});
 	qModal.show();
 }
-function ldbDeleteAccount2() {
-	$.post("/api/lesedatenbank.php", 
-		{
-            cmd: "deleteAccount"
-		},
-		function (response, status) {
-			window.open("https://mint/lesedatenbank.php", "_self");
+
+function bdbDeleteAccount2() {
+	$.post("/api/bdb.php/account/delete",
+		{},
+		function(response, status) {
+			window.open("https://mint.jojojux.de/bdb.php", "_self");
+		});
+}
+
+function bdbShareCat() {
+	var categoryName = $("#bdbTableSelect").find(":selected").val();
+	
+	$.get("/api/bdb.php/book/getAll", {
+		categoryName: categoryName
+	},
+	function(response, status) {
+		var allShared = true;
+		var books = JSON.parse(response)["content"];
+	
+		books.forEach(function (book, index) {
+			if (book["key"] == "") {
+				allShared = false;
+			}
+		});
+
+		if (allShared == false) {
+			//POST data
+			$.post("/api/bdb.php/category/startSharing", {
+				categoryName: categoryName
+			},
+			function(response, status) {
+				$(`#bdbShareCat-button`).addClass('active');
+				books.forEach(function (book, index) {
+					var hardCleanedBookName = hardClean(book["bookName"])
+					$(`#${hardCleanedBookName}-group`).attr("key", JSON.parse(response)["key"]);
+					$(`#${hardCleanedBookName}-share`).addClass('active');
+				});
+
+				$("#okModal-body").html(JSON.parse(response)['content']);
+
+				var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+					keyboard: false,
+					focus: true
+				});
+				okModal.show();
+			});
+		} else {
+			$("#qModal-OK").attr("onclick", `bdbStopSharingCategory("${categoryName}")`);
+			$("#qModal-body").text(langmng.get("tools.booksDB.wantToStopSharing", langmng.current));
+
+			var qModal = new bootstrap.Modal(document.getElementById('qModal'), {
+				keyboard: false,
+				focus: true
+			});
+			qModal.show();
+		}
 	});
+}
+
+function bdbStopSharingCategory() {
+	//POST data
+	$.post("/api/bdb.php/category/stopSharing", {
+		categoryName: categoryName
+	},
+	function(response, status) {
+		$(`#bdbShareCat-button`).removeClass('active');
+		books.forEach(function (book, index) {
+			var hardCleanedBookName = hardClean(book["bookName"]);
+			$(`#${hardCleanedBookName}-group`).attr("key", "");
+			$(`#${hardCleanedBookName}-share`).removeClass('active');
+		});
+
+		$('#qModal').modal('hide');
+
+		$("#okModal-body").html(JSON.parse(response)['content']);
+
+		var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+			keyboard: false,
+			focus: true
+		});
+		okModal.show();
+	});
+}
+
+function bdbShareBook(hardCleanedBookName) {
+	var categoryName = $("#bdbTableSelect").find(":selected").val();
+	var bookName = $(`#${hardCleanedBookName}-name`).val();
+
+	if ($(`#${hardCleanedBookName}-group`).attr("key") == "") {
+		//POST data
+		$.post("/api/bdb.php/book/startSharing", {
+			categoryName: categoryName,
+			bookName: bookName
+		},
+		function(response, status) {
+			$(`#${hardCleanedBookName}-group`).attr("key", JSON.parse(response)["key"]);
+			$(`#${hardCleanedBookName}-share`).addClass('active');
+			
+			$("#okModal-body").html(JSON.parse(response)['content']);
+
+			var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+				keyboard: false,
+				focus: true
+			});
+			okModal.show();
+		});
+	} else {
+		$("#qModal-OK").attr("onclick", `bdbStopSharingBook("${categoryName}", "${bookName}", "${hardCleanedBookName}")`);
+		$("#qModal-body").text(langmng.get("tools.booksDB.wantToStopSharing", langmng.current));
+
+		var qModal = new bootstrap.Modal(document.getElementById('qModal'), {
+			keyboard: false,
+			focus: true
+		});
+		qModal.show();
+	}
+	
+	$.get("/api/bdb.php/book/getAll", {
+		categoryName: categoryName
+	},
+	function(response, status) {
+		var allShared = true;
+		var books = JSON.parse(response)["content"];
+	
+		books.forEach(function (book, index) {
+			if (book["key"] == "") {
+				allShared = false;
+			}
+		});
+		
+		if (allShared) {
+			$(`#bdbShareCat-button`).addClass('active');
+		} else {
+			$(`#bdbShareCat-button`).removeClass('active');
+		}
+	});
+}
+function bdbStopSharingBook(categoryName, bookName, hardCleanedBookName) {
+	//POST data
+	$.post("/api/bdb.php/book/stopSharing", {
+		categoryName: categoryName,
+		bookName: bookName
+	},
+	function(response, status) {
+		$(`#${hardCleanedBookName}-group`).attr("key", "");
+		$(`#${hardCleanedBookName}-share`).removeClass('active');
+			
+		$('#qModal').modal('hide');
+			
+		$("#okModal-body").html(JSON.parse(response)['content']);
+
+		var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+			keyboard: false,
+			focus: true
+		});
+		okModal.show();
+	})
+}
+
+
+function bdbShowShareLink() {
+	$("#okModal-body").html(langmng.get("tools.booksDB.showShareLink", langmng.current).replace("${url}", window.location));
+
+	var okModal = new bootstrap.Modal(document.getElementById('okModal'), {
+		keyboard: false,
+		focus: true
+	});
+	okModal.show();
+	
 }
