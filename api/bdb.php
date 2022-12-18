@@ -12,7 +12,7 @@ $forbiddenUsernames = array("data");
 #Configure session
 session_name('PHPSESSID-booksDB');
 session_start();
-$session_timeout = 900;
+$session_timeout = 86400;
 
 include '../lang.php';
 
