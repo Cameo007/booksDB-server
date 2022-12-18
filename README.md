@@ -1,19 +1,18 @@
-# Lesedatenbank - Managing read and unread books
-Repository for the Lesedatenbank server files. The android app's source code is available [here](https://github.com/Cameo007/Lesedatenbank-app/).
+# booksDB - Managing read and unread books
+Repository for the booksDB server files. The android app's source code is available [here](https://github.com/Cameo007/booksDB-app/).
 
 ## Requirements
-- A MySQL database named "Lesedatenbank"
+- A MySQL database named "booksDB"
 - [GuzzleHttp](https://github.com/guzzle/guzzle) installed via composer
-- [Parsedown](https://github.com/erusev/parsedown) installed via composer (for parsing documentation)
 
 ## Setup
-1. Insert the username & password of the MySQL user in the `lesedatenbank.php` and the `/api/lesedatenbank.php`
+1. Insert the username & password of the MySQL user in the `/api/bdb.php`
 
 ## Libraries
   
 ## License
 ```
-Lesedatenbank - Managing read and unread books
+booksDB - Managing read and unread books
 Copyright (C) 2022  Pascal Dietrich
 
 This library is free software; you can redistribute it and/or
