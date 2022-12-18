@@ -6,14 +6,19 @@ header('Content-Type: text/html; charset=utf-8');
 $GLOBALS['mySQLUsername'] = '';
 $GLOBALS['mySQLPassword'] = '';
 
+#Forbidden usernames
+$forbiddenUsernames = array("data");
+
 #Configure session
-session_name('PHPSESSID-Ldb');
+session_name('PHPSESSID-booksDB');
 session_start();
 $session_timeout = 900;
 
+include '../lang.php';
+
 function authenticate($username, $password) {
 	#Initialize DB
-	$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+	$pdo = new PDO('mysql:host=localhost;dbname=booksDB;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
 	
 	#Get password hash for username
 	$sql = "SELECT * FROM data WHERE username='$username'";
@@ -24,72 +29,55 @@ function authenticate($username, $password) {
 }
 
 function hardClean($string) {
-	return strtolower(preg_replace('/[^A-Za-zŽžÀ-ÿ0-9\-]/gm+/', '', $string));
+	return strtolower(preg_replace('/[^A-Za-zŽžÀ-ÿ0-9\-]+/', '', $string));
 }
 function clean($string) {
-	return preg_replace('/[^A-Za-zŽžÀ-ÿ0-9\-!§$%\/=?\^°´<>|+*~#()\[\]{}.:,; ]+/', '', $string);
+	return preg_replace('/[^A-Za-zŽžÀ-ÿ0-9\-!§$%\/=?°<>|+*~#()\[\]{}.:,; ]+/', '', $string);
+}
+
+function randomString($length) {
+    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
 }
 
 function authenticated($username) {
 	#Initialize DB
-	$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+	$pdo = new PDO('mysql:host=localhost;dbname=booksDB;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
 	
 	#Check if cmd is given
-	if (isset($_POST['cmd']) || isset($_GET['cmd'])) {
-		#Get cmd from GET or POST parameter
-		if (isset($_POST['cmd'])) {
-			$cmd = $_POST['cmd'];
-		} elseif (isset($_GET['cmd'])) {
-			$cmd = $_GET['cmd'];
-		}
+	if (explode('?', explode(basename(__FILE__), $_SERVER['REQUEST_URI'])[1])[0] != null) {
+		#Get cmd
+		$cmd = explode('?', explode(basename(__FILE__), $_SERVER['REQUEST_URI'])[1])[0];
 		
 		#Check if cmd is allowed
-		if ($cmd == 'addCategory') {
+		if ($cmd == '/category/rename') {
 			#Get parameters
-			$name = $username . '--' . clean($_POST['categoryName']);
+			$oldCategoryName = clean($_POST['oldCategoryName']);
+			$newCategoryName = clean($_POST['newCategoryName']);
 			
 			#Build & execute sql statement
-			$statement = "CREATE TABLE IF NOT EXISTS `$name`(
-				name VARCHAR(50),
-				author VARCHAR(50),
-				`read` TINYINT(0)
-				);";
+			$statement = "UPDATE `$username` SET category=`$oldCategoryName` WHERE category='$newCategoryName'";
 			$pdo->exec($statement);
 			
 			#Return result
 			$result = array(
-				'content' => 'Die Kategorie wurde hinzugefügt.'
+				'content' => getString('api.booksDB.categoryHasBeenRenamed')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'deleteCategory') {
+		} elseif ($cmd == '/category/delete') {
 			#Get parameters
-			$name = $username . '--' . clean($_POST['categoryName']);
+			$categoryName = clean($_POST['categoryName']);
 			
-			$statement = "DROP TABLE`$name`;";
+			$statement = "DELETE FROM `$username` where category='$categoryName';";
 			$pdo->exec($statement);
 			
 			#Return result
 			$result = array(
-				'content' => 'Die Kategorie wurde gelöscht.'
+				'content' => getString('api.booksDB.categoryHasBeenDeleted')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'renameCategory') {
-			#Get parameters
-			$oldName = $username . '--' . clean($_POST['oldCategoryName']);
-			$newName = $username . '--' . clean($_POST['newCategoryName']);
-			
+		} elseif ($cmd == '/category/getAll') {
 			#Build & execute sql statement
-			$statement = "RENAME TABLE `$oldName` TO `$newName`";
-			$pdo->exec($statement);
-			
-			#Return result
-			$result = array(
-				'content' => 'Die Kategorie wurde umbenannt.'
-			);
-			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'getCategories') {
-			#Build & execute sql statement
-			$sql = "SHOW TABLES LIKE '$username--%';";
+			$sql = "SELECT category FROM `$username` GROUP BY category ORDER BY category;";
 			$data = $pdo->query($sql)->fetchAll();
 			
 			#Generate list of categories
@@ -103,65 +91,109 @@ function authenticated($username) {
 				'content' => $categories
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'addBook') {
+		} elseif ($cmd == '/category/startSharing') {
 			#Get parameters
-			$category = $username . '--' . $_POST['categoryName'];
+			$categoryName = clean($_POST['categoryName']);
+			
+			$key = '';
+			
+			#Build & execute sql statement
+			$sql = "SELECT * FROM `$username` WHERE category='$categoryName' ORDER BY `read`, name;";
+			$data = $pdo->query($sql)->fetchAll();
+			
+			$books = [];
+			foreach ($data as $book) {
+				if ($book[4] != '') {
+					$key = $book[4];
+				}
+			}
+			
+			if ($key == '') {
+				$key = randomString(10);
+			}
+			
+			#Build & execute sql statement
+			$sql = "UPDATE `$username` SET `key`='$key' WHERE category='$categoryName';";
+			$pdo->prepare($sql)->execute();
+			
+			#Return result
+			$result = array(
+				'content' =>  sprintf(getString('api.booksDB.startSharingSuccessfull'), $categoryName, $username, $key),
+				'key' => $key
+			);
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		} elseif ($cmd == '/category/stopSharing') {
+			#Get parameters
+			$categoryName = clean($_POST['categoryName']);
+			
+			#Build & execute sql statement
+			$sql = "UPDATE `$username` SET `key`='' WHERE category='$categoryName';";
+			$pdo->prepare($sql)->execute();
+			
+			#Return result
+			$result = array(
+				'content' =>  getString('api.booksDB.stopSharingSuccessfull')
+			);
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		} elseif ($cmd == '/book/add') {
+			#Get parameters
+			$categoryName = clean($_POST['categoryName']);
 			$name = $_POST['bookName'];
 			$author = $_POST['author'];
 			$read = (int) ($_POST['read'] == 'true' ? true : false);
 			
 			#Build & execute sql statement
-			$sql = "INSERT INTO `$category` (name, author, `read`) VALUES ('$name','$author',$read);";
+			$sql = "INSERT INTO `$username` (category, name, author, `read`, `key`) VALUES ('$categoryName','$name','$author',$read, '');";
 			$pdo->prepare($sql)->execute();
 			
 			#Return result
 			$result = array(
-				'content' => 'Das Buch wurde hinzugefügt.'
+				'content' => getString('api.booksDB.bookHasBeenAdded')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'deleteBook') {
+		} elseif ($cmd == '/book/edit') {
 			#Get parameters
-			$category = $username . '--' . $_POST['categoryName'];
-			$name = $_POST['bookName'];
-			
-			$sql = "DELETE FROM `$category` where name='$name'";
-			$pdo->prepare($sql)->execute();
-			
-			#Return result
-			$result = array(
-				'content' => 'Das Buch wurde gelöscht.'
-			);
-			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'editBook') {
-			#Get parameters
-			$category = $username . '--' . $_POST['categoryName'];
+			$categoryName = clean($_POST['categoryName']);
 			$oldName = $_POST['oldBookName'];
 			$newName = $_POST['newBookName'];
 			$author = $_POST['author'];
 			$read = (int) ($_POST['read'] == 'true' ? true : false);
 			
 			#Build & execute sql statement
-			$sql = "UPDATE `$category` SET name='$newName', author='$author', `read`='$read' WHERE name='$oldName';";
+			$sql = "UPDATE `$username` SET name='$newName', author='$author', `read`='$read' WHERE category='$categoryName' AND name='$oldName';";
 			$pdo->prepare($sql)->execute();
 			
 			#Return result
 			$result = array(
-				'content' => 'Der Bucheintrag wurde bearbeitet.'
+				'content' => getString('api.booksDB.bookHasBeenEdited')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'getBooks') {
+		} elseif ($cmd == '/book/delete') {
+			#Get parameters
+			$categoryName = clean($_POST['categoryName']);
+			$bookName = $_POST['bookName'];
+			
+			$sql = "DELETE FROM `$username` WHERE category='$categoryName' AND name='$bookName';";
+			$pdo->prepare($sql)->execute();
+			
+			#Return result
+			$result = array(
+				'content' => getString('api.booksDB.bookHasBeenDeleted')
+			);
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		} elseif ($cmd == '/book/getAll') {
 			if (isset($_GET['categoryName'])) {
 				#Get parameters
-				$category = $username . '--' . $_GET['categoryName'];
+				$categoryName = $_GET['categoryName'];
 
 				#Build & execute sql statement
-				$sql = "SELECT * FROM `$category` ORDER BY `read`, name;";
+				$sql = "SELECT * FROM `$username` WHERE category='$categoryName' ORDER BY `read`, name;";
 				$data = $pdo->query($sql)->fetchAll();
 
 				$books = [];
 
 				foreach ($data as $book) {
-					array_push($books, ['bookName' => $book[0], 'author' => $book[1], 'read' => (bool) $book[2]]);
+					array_push($books, ['bookName' => $book[1], 'author' => $book[2], 'read' => (bool) $book[3], 'key' => $book[4]]);
 				}
 
 				#Return result
@@ -175,25 +207,58 @@ function authenticated($username) {
 				);
 			}
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'deleteAccount') {
-			#Destroy session
-			session_destroy();
+		} elseif ($cmd == '/book/startSharing') {
+			#Get parameters
+			$categoryName = $_POST['categoryName'];
+			$bookName = $_POST['bookName'];
+			
+			$key = '';
 			
 			#Build & execute sql statement
-			$sql = "SHOW TABLES LIKE '$username--%';";
+			$sql = "SELECT * FROM `$username` WHERE category='$categoryName' ORDER BY `read`, name;";
 			$data = $pdo->query($sql)->fetchAll();
 			
-			$categories = '';
-			foreach ($data as $category) {
-				if ($categories == '') {
-					$categories = "`$category[0]`";
-				} else {
-					$categories = $categories . ", `$category[0]`";
+			$books = [];
+			foreach ($data as $book) {
+				if ($book[4] != '') {
+					$key = $book[4];
 				}
 			}
 			
+			if ($key == '') {
+				$key = randomString(10);
+			}
+			
+			#Build & execute sql statement
+			$sql = "UPDATE `$username` SET `key`='$key' WHERE category='$categoryName' AND name='$bookName';";
+			$pdo->prepare($sql)->execute();
+			
+			#Return result
+			$result = array(
+				'content' =>  sprintf(getString('api.booksDB.startSharingSuccessfull'), $categoryName, $username, $key),
+				'key' => $key
+			);
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		} elseif ($cmd == '/book/stopSharing') {
+			#Get parameters
+			$categoryName = $_POST['categoryName'];
+			$bookName = $_POST['bookName'];
+			
+			#Build & execute sql statement
+			$sql = "UPDATE `$username` SET `key`='' WHERE category='$categoryName' AND name='$bookName';";
+			$pdo->prepare($sql)->execute();
+			
+			#Return result
+			$result = array(
+				'content' => getString('api.booksDB.stopSharingSuccessfull')
+			);
+			echo json_encode($result, JSON_UNESCAPED_UNICODE);
+		} elseif ($cmd == '/account/delete') {
+			#Destroy session
+			session_destroy();
+			
 			#Build & execute sql statement (remove categories)
-			$statement = "DROP TABLE $categories;";
+			$statement = "DROP TABLE $username;";
 			$pdo->prepare($sql)->execute();
 					
 			##Build & execute sql statement (remove username & passwordhash)
@@ -202,10 +267,10 @@ function authenticated($username) {
 			
 			#Return result
 			$result = array(
-				'content' => 'Ihr Konto wurde gelöscht.'
+				'content' => getString('api.booksDB.accountHasBeenDeleted')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'changePassword') {
+		} elseif ($cmd == '/account/changePassword') {
 			#Destroy session
 			session_destroy();
 			
@@ -219,52 +284,20 @@ function authenticated($username) {
 			
 			#Return result
 			$result = array(
-				'content' => 'Ihr Passwort wurde geändert. Sie müssen sich nun erneut anmelden.'
+				'content' => getString('api.booksDB.passwordHasBeenChanged')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'changeUsername') {
-			#Destroy session
-			session_destroy();
-			
-			#Get new username
-			$newUsername = $_POST['newUsername'];
-			
-			#Get categories
-			#Build & execute sql statement
-			$sql = "SHOW TABLES LIKE '$username--%';";
-			$data = $pdo->query($sql)->fetchAll();
-			
-			#Rename categories
-			foreach ($data as $category) {
-				$newCatName = str_replace($username, $newUsername, $category[0]);
-				
-				#Build & execute sql statement
-				$statement = "RENAME TABLE `$category[0]` TO `$newCatName`";
-				$pdo->exec($statement);
-			}
-			
-			#Change username in data
-			#Build & execute sql statement
-			$sql = "UPDATE `data` SET username='$newUsername' WHERE username='$username';";
-			$pdo->prepare($sql)->execute();
-			
-			#Return result
-			$result = array(
-				'content' => 'Ihr Benutzername wurde geändert. Sie müssen sich nun erneut anmelden.'
-			);
-			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} elseif ($cmd == 'register') {
+		} elseif ($cmd == '/account/register') {
 			session_destroy();
 			
 			#Return error
 			$result = array(
-				'content' => "Der Benutzername \"$username\" ist bereits registriert."
+				'content' => sprintf(getString('api.booksDB.usernameIsAlreadyTaken'), $username)
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-			http_response_code(400);
-		} elseif ($cmd == 'isUsernameAvailable') {
+		} elseif ($cmd == '/account/isUsernameAvailable') {
 			#Initialize DB
-			$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+			$pdo = new PDO('mysql:host=localhost;dbname=booksDB;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
 			
 			$name = $_GET['name'];
 
@@ -273,47 +306,53 @@ function authenticated($username) {
 			$data = $pdo->query($sql)->fetchAll();
 
 			#Check if username is available
-			$exists = true;
+			$available = true;
 			foreach ($data as $user) {
 				if ($user[0] == $name) {
-					$exists = false;
+					$available = false;
 				}
+			}
+			
+			#Check if username is forbidden
+			if (in_array($name, $forbiddenUsernames)) {
+				$available = false;
 			}
 
 			#Build result
 			$result = array(
-				'content' => $exists
+				'content' => $available
 			);
 
 			#Return result
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
-		} else if ($cmd == 'getUsernames') {
-			#Initialize DB
-			$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+		} elseif ($cmd == '/shared') {
+			#Get parameters
+			$username = $_GET['username'];
+			$categoryName = clean($_GET['category']);
+			$key = $_GET['key'];
+			
+			$books = [];
+			if ($key != '') {
+				#Build & execute sql statement
+				$sql = "SELECT * FROM `$username` WHERE category='$categoryName' AND `key`='$key' ORDER BY `read`, name;";
+				$pdo->prepare($sql)->execute();
 
-			#Build & execute sql statement
-			$sql = "SELECT * FROM data;";
-			$data = $pdo->query($sql)->fetchAll();
-
-			#Build list
-			$usernames = array();
-			foreach ($data as $uname) {
-				array_push($usernames, $uname[0]);
+				foreach ($data as $book) {
+					array_push($books, ['bookName' => $book[1], 'author' => $book[2], 'read' => (bool) $book[3], 'key' => $book[4]]);
+				}
 			}
 
-			#Build result
-			$result = array(
-				'content' => $usernames
-			);
-
 			#Return result
+			$result = array(
+				'content' => $books
+			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
 		} else {
 			session_destroy();
 			
 			#Return error
 			$result = array(
-				'content' => 'Der Befehl ist ungültig'
+				'content' => getString('api.booksDB.cmdIsInvalid')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
 			http_response_code(400);
@@ -323,7 +362,7 @@ function authenticated($username) {
 		
 		#Return error
 		$result = array(
-				'content' => 'Es wurde kein Befehl angegeben'
+				'content' => getString('api.booksDB.noCmdWasGiven')
 			);
 		echo json_encode($result, JSON_UNESCAPED_UNICODE);
 		http_response_code(400);
@@ -336,26 +375,22 @@ if(isset($_SESSION['start_time']) && (time() - $_SESSION['start_time']) < $sessi
 	authenticated($_SESSION['username']);
 } else {
 	#If credentials are given
-	if ((isset($_POST['username']) && isset($_POST['password'])) || (isset($_GET['username']) && isset($_GET['password']))) {
+	if ((isset($_POST['username']) && isset($_POST['password'])) || isset($_GET['username']) && isset($_GET['password'])) {
 		#Get login credentials from GET or POST
 		if (isset($_POST['username']) && isset($_POST['password'])) {
-			$username = $_POST['username'];
+			$username = hardClean($_POST['username']);
 			$password = $_POST['password'];
 		} elseif (isset($_GET['username']) && isset($_GET['password'])) {
-			$username = $_GET['username'];
+			$username = hardClean($_GET['username']);
 			$password = $_GET['password'];
 		}
 		
-		#Get cmd from GET or POST parameter
-		if (isset($_POST['cmd'])) {
-			$cmd = $_POST['cmd'];
-		} elseif (isset($_GET['cmd'])) {
-			$cmd = $_GET['cmd'];
-		}
+		#Get cmd
+		$cmd = explode('?', explode(basename(__FILE__), $_SERVER['REQUEST_URI'])[1])[0];
 		
 		#If authenticating is successfull
 		if (authenticate($username, $password)) {
-			if ($cmd == 'authenticate') {
+			if ($cmd == '/account/authenticate') {
 				#Return result
 				$result = array(
 					'content' => true
@@ -366,99 +401,141 @@ if(isset($_SESSION['start_time']) && (time() - $_SESSION['start_time']) < $sessi
 				authenticated($username);
 			}
 		} else {
-			if ($cmd == 'register') {
-				#Initialize DB
-				$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
-				
-				#Get password hash
-				$passwordHash = password_hash($password, PASSWORD_DEFAULT);
-				
-				#Create data table if not exits
-				$sql = "CREATE TABLE IF NOT EXISTS data(
-					username VARCHAR(100),
-					passwordHash VARCHAR(100)
-					);";
-				$pdo->exec($sql);
+			#Initialize DB
+			$pdo = new PDO('mysql:host=localhost;dbname=booksDB;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+			if ($cmd == '/account/register') {
+				#Check if username is forbidden
+				if (!in_array($name, $forbiddenUsernames)) {
+					#Get password hash
+					$passwordHash = password_hash($password, PASSWORD_ARGON2ID);
 
-				#Register user
-				$sql = "INSERT INTO data (username, passwordHash) VALUES ('$username', '$passwordHash')";
-				$pdo->prepare($sql)->execute();
-				
-				#Return result
-				$result = array(
-					'content' => 'Sie wurden erfolgreich registriert.'
-				);
+					#Create data table if not exits
+					$sql = "CREATE TABLE IF NOT EXISTS data(
+						username VARCHAR(100),
+						passwordHash VARCHAR(100)
+						);";
+					$pdo->exec($sql);
+
+					#Register user
+					$sql = "INSERT INTO data (username, passwordHash) VALUES ('$username', '$passwordHash')";
+					$pdo->prepare($sql)->execute();
+
+					#Create user's data table if not exits
+					$sql = "CREATE TABLE IF NOT EXISTS $username(
+						category TEXT,
+						name TEXT,
+						author TEXT,
+						`read` TINYINT
+						);";
+					$pdo->exec($sql);
+
+					#Return result
+					$result = array(
+						'content' => getString('api.booksDB.youHaveBeenSuccessfullyRegistered')
+					);
+				} elseif ($cmd == '/shared') {
+					#Get parameters
+					$username = $_GET['username'];
+					$categoryName = clean($_GET['category']);
+					$key = $_GET['key'];
+
+					$books = [];
+					if ($key != '') {
+						#Build & execute sql statement
+						$sql = "SELECT * FROM `$username` WHERE category='$categoryName' AND `key`='$key' ORDER BY `read`, name;";
+						$pdo->prepare($sql)->execute();
+
+						foreach ($data as $book) {
+							array_push($books, ['bookName' => $book[1], 'author' => $book[2], 'read' => (bool) $book[3], 'key' => $book[4]]);
+						}
+					}
+
+					#Return result
+					$result = array(
+						'content' => $books
+					);
+					echo json_encode($result, JSON_UNESCAPED_UNICODE);
+				} else {
+					#Return result
+					$result = array(
+						'content' => getString('api.booksDB.usernameIsAlreadyTaken')
+					);
+				}
 				echo json_encode($result, JSON_UNESCAPED_UNICODE);
 			} else {
 				session_destroy();
 				
 				#Return error
 				$result = array(
-					'content' => 'Ihre Zugangsdaten sind ungültig'
+					'content' => getString('api.booksDB.loginCredsAreInvalid')
 				);
 				echo json_encode($result, JSON_UNESCAPED_UNICODE);
-				http_response_code(400);
 			}
 		}
 	#If no login credentials are given
 	} else {
-		if (isset($_GET['cmd'])) {
-			#Get cmd from GET parameter
-			$cmd = $_GET['cmd'];
-
-			if ($cmd == 'isUsernameAvailable') {
-				#Initialize DB
-				$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
-
+		if (explode('?', explode(basename(__FILE__), $_SERVER['REQUEST_URI'])[1])[0] != null) {
+			#Initialize DB
+			$pdo = new PDO('mysql:host=localhost;dbname=booksDB;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+			
+			#Get cmd
+			$cmd = explode('?', explode(basename(__FILE__), $_SERVER['REQUEST_URI'])[1])[0];
+			
+			if ($cmd == '/account/isUsernameAvailable') {
 				#Get username
-				$name = $_GET['name'];
+				$name = hardClean($_GET['name']);
 
 				#Build & execute sql statement
 				$sql = "SELECT * FROM data;";
 				$data = $pdo->query($sql)->fetchAll();
 
 				#Check if username is available
-				$exists = true;
+				$available = true;
 				foreach ($data as $user) {
 					if ($user[0] == $name) {
-						$exists = false;
+						$available = false;
 					}
+				}
+				
+				#Check if username is forbidden
+				if (in_array($name, $forbiddenUsernames)) {
+					$available = false;
 				}
 
 				#Build result
 				$result = array(
-					'content' => $exists
+					'content' => $available
 				);
 
 				#Return result
 				echo json_encode($result, JSON_UNESCAPED_UNICODE);
-			} else if ($cmd == 'getUsernames') {
-				#Initialize DB
-				$pdo = new PDO('mysql:host=localhost;dbname=Lesedatenbank;charset=utf8', $GLOBALS['mySQLUsername'], $GLOBALS['mySQLPassword']);
+			} elseif ($cmd == '/shared') {
+				#Get parameters
+				$username = $_GET['username'];
+				$categoryName = clean($_GET['categoryName']);
+				$key = $_GET['key'];
 
 				#Build & execute sql statement
-				$sql = "SELECT * FROM data;";
+				$sql = "SELECT * FROM `$username` WHERE category='$categoryName' AND `key`='$key' ORDER BY `read`, name;";
 				$data = $pdo->query($sql)->fetchAll();
 
-				#Build list
-				$usernames = array();
-				foreach ($data as $username) {
-					array_push($usernames, $username[0]);
+				$books = [];
+
+				foreach ($data as $book) {
+					array_push($books, ['bookName' => $book[1], 'author' => $book[2], 'read' => (bool) $book[3], 'key' => $book[4]]);
 				}
 
-				#Build result
-				$result = array(
-					'content' => $usernames
-				);
-
 				#Return result
+				$result = array(
+					'content' => $books
+				);
 				echo json_encode($result, JSON_UNESCAPED_UNICODE);
 			} else {
 				session_destroy();
 
 				#Return error
 				$result = array(
-					'content' => 'Es wurde keine Sitzung / Es wurden keine Zugangsdaten angegeben'
+					'content' => getString('api.booksDB.noCredsGiven')
 				);
 				echo json_encode($result, JSON_UNESCAPED_UNICODE);
 				http_response_code(400);
@@ -468,7 +545,7 @@ if(isset($_SESSION['start_time']) && (time() - $_SESSION['start_time']) < $sessi
 
 			#Return error
 			$result = array(
-				'content' => 'Es wurde keine Sitzung / Es wurden keine Zugangsdaten angegeben'
+				'content' => getString('api.booksDB.noCredsGiven')
 			);
 			echo json_encode($result, JSON_UNESCAPED_UNICODE);
 			http_response_code(400);
