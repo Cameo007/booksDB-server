@@ -1,0 +1,233 @@
+{
+  "version": "0.0.2",
+  "langs": [
+    "de",
+    "en"
+  ],
+  "names": [
+    "Deutsch",
+    "English"
+  ],
+  "pack": {
+    "nav.home": [
+      "Startseite",
+      "Homepage"
+    ],
+    "nav.tools.booksDB": [
+      "booksDB",
+      "booksDB"
+    ],
+    "footer.privacy": [
+      "Datenschutz",
+      "Privacy"
+    ],
+    "cookies.text": [
+      "&#x1F36A; mint nutzt Cookies, um funktionieren. Wenn Sie keine Cookies möchten, haben Sie Pech gehabt.",
+      "&#x1F36A; mint uses cookies to work. If you don't want cookies, you're out of luck."
+    ],
+    "cookies.learnMore": [
+      "Mehr Infos",
+      "Learn more"
+    ],
+    "cookies.ok": [
+      "OK",
+      "OK"
+    ],
+    "tools.booksDB.title": [
+      "booksDB",
+      "booksDB"
+    ],
+    "tools.booksDB.ok": [
+      "OK",
+      "OK"
+    ],
+    "tools.booksDB.yes": [
+      "Ja",
+      "Yes"
+    ],
+    "tools.booksDB.enterAnotherUsername": [
+      "Geben Sie bitte einen (anderen) Benutzernamen ein!",
+      "Please enter a(nother) user name!"
+    ],
+    "tools.booksDB.enterPassword": [
+      "Geben Sie bitte ein Passwort ein!",
+      "Please enter a password!"
+    ],
+    "tools.booksDB.passwordsDontMatch": [
+      "Die beiden Passwörter stimmen nicht überein!",
+      "The two passwords do not match!"
+    ],
+    "tools.booksDB.username": [
+      "Benutzername",
+      "Username"
+    ],
+    "tools.booksDB.newUsername": [
+      "Neuer Benutzername",
+      "New username"
+    ],
+    "tools.booksDB.newPassword": [
+      "Neues Passwort",
+      "New password"
+    ],
+    "tools.booksDB.newPasswordRepeat": [
+      "Neues Passwort wiederholen",
+      "Repeat new password"
+    ],
+    "tools.booksDB.enterUsername": [
+      "Geben Sie bitte einen Benutzernamen ein!",
+      "Please enter a username!"
+    ],
+    "tools.booksDB.enterNewUsername": [
+      "Geben Sie bitte ihren neuen Benutzernamen ein!",
+      "Please enter your new username!"
+    ],
+    "tools.booksDB.enterNewPassword": [
+      "Geben Sie bitte ihr neues Passwort ein!",
+      "Please enter your new password!"
+    ],
+    "tools.booksDB.password": [
+      "Passwort",
+      "Password"
+    ],
+    "tools.booksDB.login": [
+      "Anmelden",
+      "Login"
+    ],
+    "tools.booksDB.register": [
+      "Registrieren",
+      "Register"
+    ],
+    "tools.booksDB.repeatPassword": [
+      "Passwort wiederholen",
+      "Repeat password"
+    ],
+    "tools.booksDB.name": [
+      "Name",
+      "Name"
+    ],
+    "tools.booksDB.author": [
+      "Autor",
+      "Author"
+    ],
+    "tools.booksDB.changeUsername": [
+      "Benutzername ändern",
+      "Change username"
+    ],
+    "tools.booksDB.changePassword": [
+      "Passwort ändern",
+      "Change password"
+    ],
+    "tools.booksDB.deleteAccount": [
+      "Konto löschen",
+      "Delete account"
+    ],
+    "tools.booksDB.noBooks": [
+      "Sie haben noch keine Bücher hinzugefügt.",
+      "You haven't added any books yet."
+    ],
+    "tools.booksDB.noSharedBooks": [
+      "Unter diesem Link werden keine Bücher geteilt.",
+      "No books are shared under this link."
+    ],
+    "tools.booksDB.wantToStopSharing": [
+      "Dieses Buch/Diese Kategorie ist öffentlich erreichbar. Möchten sie dies beenden?",
+      "This book/category is publicly accessible. Do you want to stop this?"
+    ],
+    "tools.booksDB.noCategories": [
+      "Sie haben noch keine Kategorien angelegt.",
+      "You haven't created any categories yet."
+    ],
+    "tools.booksDB.usernamePasswordCombiDoesntExist": [
+      "Die von Ihnen eingegebene Kombination aus Benutzername und Passwort existiert nicht.<br><a href=\"/bdb.php\">Hier</a> können Sie versuchen, sich noch einmal einzuloggen.",
+      "The username and password combination you entered doesn't exist.<br>You can try to log in again <a href=\"/bdb.php\">here</a>."
+    ],
+    "tools.booksDB.usernameAlreadyExists": [
+      "Der von Ihnen eingegebene Benutzername existiert bereits.<br><a href=\"/bdb.php?signup\">Hier</a> können Sie versuchen, sich mit einem anderen Benutzernamen zu registrieren.",
+      "The user name you entered already exists.<br>You can try to register with a different user name <a href=\"/bdb.php?signup\">here</a>."
+    ],
+    "tools.booksDB.apiDoc": [
+      "API-Dokumentation",
+      "API documentation"
+    ],
+    "tools.booksDB.wantToDeleteAccount": [
+      "Sind Sie sicher, dass Sie ihr booksDB-Konto endgültig löschen wollen?",
+      "Are you sure you want to delete your booksDB account forever?"
+    ],
+    "tools.booksDB.showShareLink": [
+      "Dieses Buch/Diese Kategorie ist <a href=\"${url}\">hier</a> erreichbar.",
+      "This book/category is available <a href=\"${url}\">here</a>."
+    ],
+    "api.booksDB.categoryHasBeenAdded": [
+      "Die Kategorie wurde hinzugefügt.",
+      "The category has been added."
+    ],
+    "api.booksDB.categoryHasBeenDeleted": [
+      "Die Kategorie wurde gelöscht.",
+      "The category has been deleted."
+    ],
+    "api.booksDB.categoryHasBeenRenamed": [
+      "Die Kategorie wurde umbenannt.",
+      "The category has been renamed."
+    ],
+    "api.booksDB.startSharingSuccessfull": [
+      "Dieses Buch/Kategorie ist nun <a href=\"https://mint.jojojux.de/bdb.php?category=%s&username=%s&key=%s\">hier</a> erreichbar.",
+      "This book/category is now available <a href=\"https://mint.jojojux.de/bdb.php?category=%s&username=%s&key=%s\">here</a>."
+    ],
+    "api.booksDB.stopSharingSuccessfull": [
+      "Dieses Buch/Kategorie wird nun nicht mehr geteilt.",
+      "This book/category is no longer shared."
+    ],
+    "api.booksDB.bookHasBeenAdded": [
+      "Das Buch wurde hinzugefügt.",
+      "The book has been added."
+    ],
+    "api.booksDB.bookHasBeenDeleted": [
+      "Das Buch wurde gelöscht.",
+      "The book has been deleted."
+    ],
+    "api.booksDB.bookHasBeenEdited": [
+      "Das Buch wurde bearbeitet.",
+      "The book has been edited."
+    ],
+    "api.booksDB.accountHasBeenDeleted": [
+      "Ihr Konto wurde gelöscht.",
+      "Your account has been deleted."
+    ],
+    "api.booksDB.sessionExpired": [
+      "Ihre Sitzung ist abgelaufen. Bitte melden sie sich erneut an!",
+      "Your session has expired. Please log in again!"
+    ],
+    "api.booksDB.passwordHasBeenChanged": [
+      "Ihr Passwort wurde geändert. Sie müssen sich nun erneut anmelden.",
+      "Your password has been changed. You'll have to log in again."
+    ],
+    "api.booksDB.usernameHasBeenChanged": [
+      "Ihr Benutzername wurde geändert. Sie müssen sich nun erneut anmelden.",
+      "Your username has been changed. You'll have to log in again."
+    ],
+    "api.booksDB.usernameIsAlreadyTaken": [
+      "Der Benutzername \"%s\" ist leider schon vergeben.",
+      "Sorry, the username \"%s\"is already taken."
+    ],
+    "api.booksDB.cmdIsInvalid": [
+      "Der Befehl ist ungültig.",
+      "The command is invalid."
+    ],
+    "api.booksDB.noCmdWasGiven": [
+      "Es wurde kein Befehl angegeben.",
+      "No command was given."
+    ],
+    "api.booksDB.noCredsGiven": [
+      "Es wurde/-n keine Sitzung/Zugangsdaten angegeben.",
+      "No session/credentials was/were given."
+    ],
+    "api.booksDB.youHaveBeenSuccessfullyRegistered": [
+      "Sie wurden erfolgreich registriert.",
+      "You have been successfully registered."
+    ],
+    "api.booksDB.loginCredsAreInvalid": [
+      "Ihre Zugangsdaten sind ungültig.",
+      "Your login credentials are invalid."
+    ]
+  }
+}
