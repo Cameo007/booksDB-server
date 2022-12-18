@@ -13,6 +13,7 @@ Repository for the booksDB server files. The android app's source code is availa
 
 ## API
 [![swagger-api validator-badge](https://validator.swagger.io/validator?url=https://mint.jojojux.de/swagger/src/bdb.json)](https://mint.jojojux.de/swagger/src/bdb.json)
+
 My API is located at `/api/bdb.php` and [documentated with Swagger](https://mint.jojojux.de/swagger).
 ## Libraries
 - [Bootstrap](https://getbootstrap.com/)
