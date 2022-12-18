@@ -2,6 +2,8 @@
 	#Header
 	header('Content-Type: text/html; charset=utf-8');
 
+	$apiEndpoint = 'https://mint.jojojux.de/';
+
 	#Requirements
 	require 'vendor/autoload.php';
 	use GuzzleHttp\Client;
@@ -253,7 +255,7 @@
 					}
 
 					function userExists($username) {
-						$client = new GuzzleHttp\Client(['base_uri' => 'https://mint.jojojux.de/', 'verify' => false]);
+						$client = new GuzzleHttp\Client(['base_uri' => $apiEndpoint, 'verify' => false]);
 						$response = json_decode($client->request('GET', '/api/bdb.php/account/isUsernameAvailable', [
 								'query' => [
 									'name' => $username,
@@ -264,7 +266,7 @@
 					}
 				
 					function authenticate($username, $password) {
-						$client = new GuzzleHttp\Client(['base_uri' => 'https://mint.jojojux.de/', 'verify' => false]);
+						$client = new GuzzleHttp\Client(['base_uri' => $apiEndpoint, 'verify' => false]);
 						$response = json_decode($client->request('GET', '/api/bdb.php/account/authenticate', [
 								'query' => [
 									'username' => $username,
