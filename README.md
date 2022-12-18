@@ -12,7 +12,8 @@ Repository for the booksDB server files. The android app's source code is availa
 4. It is not necessary but you may want to adjust the meta-tags in `bdb.php` and the text in the footer. But if you change the footer's text don't forget to adjust it in the `lang.json` file too.
 
 ## API
-[![swagger-api validator-badge]({https://mint.jojojux.de/swagger/src/bdb.json}task-list-api-swagger-definition.yaml)](https://mint.jojojux.de/swagger/src/bdb.json)
+[![swagger-api validator-badge](https://mint.jojojux.de/swagger/src/bdb.json)](https://mint.jojojux.de/swagger/src/bdb.json)
+
 ## Libraries
 - [Bootstrap](https://getbootstrap.com/)
 - [jQuery](https://jquery.com/)
