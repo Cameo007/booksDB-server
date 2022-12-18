@@ -7,6 +7,7 @@ Repository for the booksDB server files. The android app's source code is availa
 
 ## Setup
 1. Insert the username & password of the MySQL user in the `/api/bdb.php`
+2. Set `$baseURL` to you your server's base URL.
 2. Notice that I assume that your website is located at `/var/www/html/`. If not, you need to change `/var/www/html/lang.json` in `lang.php` to the path, where `lang.json` is stored on your server.
 
 ## Libraries
