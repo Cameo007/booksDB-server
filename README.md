@@ -12,6 +12,10 @@ Repository for the booksDB server files. The android app's source code is availa
 4. It is not necessary but you may want to adjust the meta-tags in `bdb.php` and the text in the footer. But if you change the footer's text don't forget to adjust it in the `lang.json` file too.
 
 ## Libraries
+- [Bootstrap](https://getbootstrap.com/)
+- [jQuery](https://jquery.com/)
+- [langmng](http://langmng.glitch.me/langmng.js)
+- [GuzzleHttp](https://github.com/guzzle/guzzle)
   
 ## License
 ```
